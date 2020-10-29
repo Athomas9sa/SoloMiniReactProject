@@ -1,7 +1,4 @@
 import React, { Component } from 'react';
-// import { Container } from "bloomer";
-// import "bulma/css/bulma.css";
-import './App.css';
 import Board from './components/Board';
 
 class App extends Component {
@@ -12,13 +9,9 @@ class App extends Component {
     errorMessage: "errorMessage"
   };
   render() 
-  {
-    return (
-      <div className="App">
+  { return (
         <Board />
-      </div>
     )
   };
 }
-
 export default App;

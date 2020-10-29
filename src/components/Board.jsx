@@ -1,54 +1,72 @@
-import React, { Component } from 'react'; //parent component for Quotes.
-import Quotes from './Quotes';
+import React, { Component } from 'react';
+import Quote from './Quote';
+import { TextField, Button } from '@material-ui/core';
+import Modal from "./Modal";
 
 class Board extends Component
-{   
-    constructor(props) 
+{    constructor(props) 
     {   super(props);
         this.state = 
-        {
-            notesStringArray: []
+        {   notesStringArray: [],
+            show: false,
         }
     }
-    
+    _handleToggle(e) 
+    {   this.setState ({
+            show: !this.state.show 
+        }) 
+    }
     _nextId()
-    {
-        this.uniqueId = this.uniqueId || 0;
+    {   this.uniqueId = this.uniqueId || 0;
         return this.uniqueId++;
     }
-
     _eachQuote(element, i)
     {   return (
-        <Quotes key={element.id} index={i}>{element.note}</Quotes>
+            <Quote key={element.id}
+                    index={i}>{element.quote}
+            </Quote>
         );
     }
-    
     async randomFact () { 
         const response = await fetch('https://cat-fact.herokuapp.com/facts/random');
         const data = await response.json();
         this._add(data.text)
-        // return data;
     };
-    
     _add(text)
     {   var array = this.state.notesStringArray;
             array.push({
                         id : this._nextId(),
-                        note : text
+                        quote : text
                     });
             JSON.stringify(array);
             this.setState({notesStringArray : array});
     }
-    render()
-    {  
+    render(){
+        const { recipient } = this.state
         return(
-            <div className='board'> 
-                {this.state.notesStringArray.map(this._eachQuote)}
-                <button className='btn btn-sm glyphicon glyphicon-plus btn-success' 
-                onClick={() => {this.randomFact()}}>+</button>    
-            </div>
+            <>
+                { !this.state.show &&(
+                    <Button
+                    // class="toggle-button"
+                    id="button"
+                    variant="outlined" 
+                    color="Primary" 
+                    onClick={e => {
+                        this._handleToggle(e);
+                    }}
+                    >Post To Cat-a-Log
+                </Button>
+                ) }
+                <Modal 
+                onClose={()=>{this._handleToggle()}} show={this.state.show} buttonValue = 'Post To Cat-a-Log' handleRandom ={()=>{this.randomFact()}} >
+                 
+                    <form >
+                        <TextField id="outlined-basic" label="Phone" variant="outlined" value={recipient} onChange={e => this.setState({ recipient: e.target.value })}/>
+                    </form>
+                </Modal>
+                <div className='board'> {this.state.notesStringArray.map(this._eachQuote)}</div>
+            </>
         );
     }
 }   
-
-export default Board;    
+export default Board;  
