@@ -12,21 +12,21 @@ describe("<TestForm />", () => {
 
     beforeEach(async () => {
       sendHandler = jest.fn().mockName("sendHandler");
-      ({ getByTestId } = render(<TestForm onSend={sendHandler} />));
+      ({ getByTestId } = render(<TestForm onChange={sendHandler} />));
 
-      fireEvent.change(getByTestId("messageText"), {
+      fireEvent.change(getByTestId("inputText"), {
         target: {
-          value: "New Message",
+          value: "New Text",
         },
       });
       fireEvent.click(getByTestId("sendButton"));
     });
 
     it("clears the text field", () => {
-      expect(getByTestId("messageText").value).toEqual("");
+      expect(getByTestId("inputText").value).toEqual("");
     });
     it("calls the send handler", () => {
-      expect(sendHandler).toHaveBeenCalledWith("New Message");
+      expect(sendHandler).toHaveBeenCalledWith("New Text");
     });
   });
 });
