@@ -22,7 +22,7 @@ app.get("/sms", async (req, res) => {
   console.log(recipient, textmessage)
   client.messages 
   .create({ 
-         
+    body: textmessage.replace("%20", " "),
     to: recipient,
     from: '+14159933857',
   }) 
