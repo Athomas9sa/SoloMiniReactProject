@@ -14,13 +14,14 @@ export default class Modal extends React.Component {
     }
     return (
       <>
-       <div className="modal">
+        <div className="modal">
          <h2>Get a Random Cat Fact Enter Number Below:</h2>
-
          <div className="content">{this.props.children}</div>
          <div className="actions">
-           <Button variant="outlined" color="Primary" onClick={this.onClose}>
-             {this.props.buttonValue}
+           <Button 
+              variant="outlined" 
+              color="Primary" 
+              onClick={this.onClose}>{this.props.buttonValue}
            </Button>
          </div> 
        </div>

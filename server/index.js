@@ -1,26 +1,32 @@
 'use strict'
-const http = require("http");
 
-const hostname = "10.0.0.2"; 
-const port = 3000; 
-
-const es6Renderer = require("express-es6-template-engine"); 
+const PORT = 3001; 
 const express = require("express");
-const path = require('path');
+const cors = require("cors");
 const app = express();
+const dotenv = require('dotenv').config();
 
-app.engine("html", es6Renderer);
-app.use(express.static(path.join(__dirname, "pulic")));
-app.use(express.json());
-app.use(express.urlencoded({extended: false}));
+app.use(cors());
 
-const server = http.createServer(app);
-server.listen (port, hostname, () => {
-console.log (`server running at http://${hostname}:${port}`)});
-
-const server = http.createServer(app);
-server.listen (()=>{console.log('server running at https://api.twilio.com/2010-04-01/Accounts/{AccountSid}/Messages.json')});
-
-const rootController = require("./server/route/userRoute");
- //console.log("is it here?", rootController)
-app.use(rootController);
+const { Twilio } = require("twilio");
+const { default: Axios } = require("axios");
+//twilio credentials
+const accountSid = `${process.env.ACCOUNTSID}`;
+const authToken = `${process.env.AUTHTOKEN}`;
+const client = new Twilio(accountSid, authToken);
+app.get("/", (req, res) => {
+  res.send("hallo!")
+})
+app.get("/sms", async (req, res) => {
+  const { recipient, textmessage } = req.query
+  console.log(recipient, textmessage)
+  client.messages 
+  .create({ 
+    body: textmessage.replace("%20", " "),       
+    to: recipient,
+    from: '+14159933857',
+  }) 
+  .then(message => console.log(message.body)) 
+  await Axios.post('https://hooks.slack.com/services/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',{text: textmessage.replace("%20", " ")})
+});
+app.listen(PORT, ()=> console.log(`server running on ${PORT}`))

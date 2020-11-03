@@ -10,23 +10,17 @@ class Board extends Component
         {   notesStringArray: [],
             show: false,
             recipient: "",
+            message: "",
         }
     }
-    _handleText (e)
-    {       const accountSid = 'AC9105b938bad3b348077f01c23623b641'; 
-            const authToken = '[ea5080782856b854c4e5d08044a74a0a]'; 
-            const client = require('twilio')(accountSid, authToken);
-            client.messages 
-                  .create({ 
-                     body: 'Hi there!', 
-                     from: '+14159933857',
-                     statusCallback: 'http://postb.in/1234abcd',       
-                     to: this.recipient,
-                   }) 
-                  .then(message => console.log(message.sid)) 
-                  .done();
-                  client.messages('MMXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX').remove();
+    
+    _handleTextMessage (themessage){ 
+        console.log(themessage, this.state.recipient)       
+        fetch(`http://localhost:3001/sms?recipient=${this.state.recipient}&textmessage=${themessage}`)
+        .then((response)=>console.log(response))
+        .catch((error)=>console.log(error))
     }
+
     _handleToggle(e) 
     {   this.setState ({
             show: !this.state.show 
@@ -47,6 +41,7 @@ class Board extends Component
         const response = await fetch('https://cat-fact.herokuapp.com/facts/random');
         const data = await response.json();
         this._add(data.text)
+        this._handleTextMessage(data.text)
     };
     _add(text)
     {   var array = this.state.notesStringArray;
@@ -57,9 +52,6 @@ class Board extends Component
             JSON.stringify(array);
             this.setState({notesStringArray : array});
     }
-    
-
-
     render(){
         const { recipient } = this.state
         return(
@@ -77,8 +69,10 @@ class Board extends Component
                 </Button>
                 ) }
                 <Modal 
-                    onClose={()=>{this._handleToggle()}} show={this.state.show} buttonValue = 'Post To Cat-a-Log' handleRandom ={()=>{this.randomFact()}} >
-                    
+                    onClose={()=>{this._handleToggle()}} 
+                    show={this.state.show} 
+                    buttonValue = 'Post To Cat-a-Log' 
+                    handleRandom ={()=>{this.randomFact()}} >
                     <form >
                         <TextField 
                             id="outlined-basic" 
@@ -86,17 +80,9 @@ class Board extends Component
                             variant="outlined" 
                             value={recipient} 
                             onChange={e => this.setState({ recipient: e.target.value })}/>
-                        <Button
-                            id="button"
-                            variant="outlined" 
-                            color="Primary" 
-                            onClick={e => {this._handleText(e);}}>Send Text
-                        </Button>
                     </form>
-
                 </Modal>
-
-            <div className='board'> {this.state.notesStringArray.map(this._eachQuote)}</div>
+                <div className='board'> {this.state.notesStringArray.map(this._eachQuote)}</div>
             </>
         );
     }

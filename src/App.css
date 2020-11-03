@@ -1,12 +1,2 @@
-div.quote {
-  overflow: scroll;
-  height: 150px;
-  width: 150px;
-  background-color: orange;
-  margin: 2px 0;
-  position: absolute;
-  cursor: -webkit-grab;
-  -webkit-box-shadow: 5px 5px 15px 0 rgba(0, 0, 0, .2);
-  box-shadow: 5px 5px 15px 0 rgba(0, 0, 0, .2);
-}
+
 

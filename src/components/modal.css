@@ -3,13 +3,39 @@ body {
   height: 100%;
 }
 body {
-  background: #eee;
+  margin: 0;
+  padding: 0;
+  background:rgb(136, 30, 228);
   display: flex;
   justify-content: center;
   align-items: center;
 }
+
+#button {
+  background: rgb(226, 171, 226);
+  z-index: 1;
+  font-size: 17px;
+  font-style: bold;
+  font-style: rgb(0,0,0);
+}
+.quote {
+    font-size: 22px;
+    padding: 5px;
+    font-family: 'Shadows Into Light', 'Tangerine', Arial;
+    overflow: scroll;
+    height: 170px;
+    width: 170px;
+    background-color: rgb(133, 226, 31);
+    margin: 3px 0;
+    position: absolute;
+    cursor: -webkit-grab;
+    -webkit-box-shadow: 5px 5px 15px 0 rgba(0, 0, 0, .2);
+    box-shadow: 5px 5px 15px 0 rgba(0, 0, 0, .2);
+    z-index: -1;
+}
+
 .modal {
-  width: 500px;
+  width: 535px;
   background: white;
   border: 1px solid #ccc;
   transition: 1.1s ease-out;
@@ -18,6 +44,8 @@ body {
   transform: scale(1);
   opacity: 1;
   visibility: visible;
+  position: absolute-centre;
+  z-index: 3;
 }
 .modal.off {
   opacity: 0;
