@@ -22,11 +22,11 @@ app.get("/sms", async (req, res) => {
   console.log(recipient, textmessage)
   client.messages 
   .create({ 
-    body: textmessage.replace("%20", " "),       
+         
     to: recipient,
     from: '+14159933857',
   }) 
   .then(message => console.log(message.body)) 
-  await Axios.post('https://hooks.slack.com/services/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',{text: textmessage.replace("%20", " ")})
+  await Axios.post(`${process.env.SLACKURL}`,{text: textmessage.replace("%20", " ")})
 });
 app.listen(PORT, ()=> console.log(`server running on ${PORT}`))
